@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node bin/server"
+    "start": "node bin/server",
+    "test": "mocha"
   },
   "dependencies": {
     "chai": "^4.2.0",

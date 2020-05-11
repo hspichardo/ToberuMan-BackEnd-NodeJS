@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - '14'
+addons:
+  chrome: stable
+branches:
+  - develop
+  - /^release-[0-999].[0-999]$/
+  - master
+notifications:
+  email:
+    recipients:
+      - hspichardo@gmail.com
+script:
+  - npm run test
+  - npm run test
