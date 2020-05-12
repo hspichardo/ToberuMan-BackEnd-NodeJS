@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/toberumanapi',{userNewUrlParser:true})
+const mongodbURL = (process.env.MONGODB_URI || 'mongodb://localhost/toberumanapi')
+mongoose.connect(mongodbURL,{userNewUrlParser:true})
 .then(()=> console.log('Conectado a MongoDb'))
     .catch(erro => console.log(erro.message));
 
