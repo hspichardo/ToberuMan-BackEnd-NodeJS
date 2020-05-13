@@ -12,6 +12,7 @@ const assert = chai.assert;
 chai.use(chaiHttp);
 const url ='http://localhost:' + (process.env.PORT || '3000');
 var id;
+console.log(url);
 describe('Testing toberumanAPI managing: CHAI + REST', function () {
     it('should return an Hola Mundo message', function(done){
         chai.request(url)
@@ -45,30 +46,30 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
             });
     });
 
-    it('should get an specific user', function () {
+    it('should get an specific user', function (done) {
         chai.request(url)
             .get("/users/"+id)
-            .end((err,res)=>{
+            .end(function (err,res){
                 expect(res).to.have.status(httpCodes.codes.OK);
                 expect(res.body).to.have.property('name','usuarioprueba');
                 done();
-            })
+            });
     });
-    it('should update an user', function () {
+    it('should update an user', function (done) {
         chai.request(url)
             .put("/users/"+id)
             .send({name: "usuariopruebaUPD",email: "prueba2@prueba.com",dni:"0315649466"})
-            .end((err,res)=>{
+            .end(function(err,res) {
                 expect(res).to.have.status(httpCodes.codes.NOCONTENT);
                 expect(res.body).to.be.empty;
                 done();
-            })
+            });
     });
 
-    it('should delete a user', function () {
+    it('should delete a user', function (done) {
         chai.request(url)
             .delete("/users/"+id)
-            .end((err,res)=> {
+            .end(function(err,res) {
                 expect(res).to.have.status(httpCodes.codes.OK);
                 done();
             })
