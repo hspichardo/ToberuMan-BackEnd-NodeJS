@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const bcrypt = require('bcrypt');
 const express = require('express');
 const { check, validationResult } = require('express-validator');
@@ -15,7 +16,7 @@ router.get('/:id', async (req, res) => {
     res.send(user);
 });
 
-router.post('/', [
+router.post('/', auth,[
     check('dni').isLength({min: 3}),
     check('email').isLength({min: 3},
         check('password').isLength({min: 8}))
@@ -46,7 +47,7 @@ router.post('/', [
     });
 });
 
-router.put('/:id', [
+router.put('/:id',auth, [
     check('name').isLength({min: 3}),
     check('email').isLength({min: 3})
 ], async (req, res)=>{
@@ -72,7 +73,7 @@ router.put('/:id', [
     res.status(httpCodes.codes.NOCONTENT).send();
 })
 
-router.delete('/:id', async(req, res)=>{
+router.delete('/:id', auth,async(req, res)=>{
 
     const user = await User.findByIdAndDelete(req.params.id);
 
