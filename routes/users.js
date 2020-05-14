@@ -23,8 +23,8 @@ router.post('/', [
     if (!errors.isEmpty()) {
         return res.status(httpCodes.codes.FORBIDDEN).json({ errors: errors.array() });
     }
-    let user = (await User.findOne({email: req.body.email}) || await User.findOne({dni: req.body.dni}) )
-    if(user) return res.status(httpCodes.codes.CONFLICT).json({message: "Usuario ya existe"})
+    let user = (await User.findOne({email: req.body.email}) || await User.findOne({dni: req.body.dni}) );
+    if(user) return res.status(httpCodes.codes.CONFLICT).json({message: "Usuario ya existe"});
 
     user = new User({
         name: req.body.name,
@@ -34,8 +34,14 @@ router.post('/', [
         roles: req.body.roles
     })
 
-    const result = await user.save()
-    res.status(httpCodes.codes.CREATED).send(result)
+    const result = await user.save();
+    res.status(httpCodes.codes.CREATED).send({
+        _id: user._id,
+        dni: user.dni,
+        name: user.name,
+        email: user.email,
+        roles: user.roles
+    });
 });
 
 router.put('/:id', [
@@ -58,21 +64,21 @@ router.put('/:id', [
         })
 
     if(!user){
-        return res.status(httpCodes.codes.NOTFOUND).send('El usuario con ese ID no esta')
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'El usuario con ese ID no se encuentra en la base de datos'});
     }
 
-    res.status(httpCodes.codes.NOCONTENT).send()
+    res.status(httpCodes.codes.NOCONTENT).send();
 })
 
 router.delete('/:id', async(req, res)=>{
 
-    const user = await User.findByIdAndDelete(req.params.id)
+    const user = await User.findByIdAndDelete(req.params.id);
 
     if(!user){
-        return res.status(httpCodes.codes.NOTFOUND).send('El user con ese ID no esta, no se puede borrar')
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'El user con ese ID no esta, no se puede borrar'});
     }
 
-    res.status(httpCodes.codes.OK).send({message: "Usuario eliminado correctamente"})
+    res.status(httpCodes.codes.OK).json({message: "Usuario eliminado correctamente"});
 
 });
 module.exports = router;
