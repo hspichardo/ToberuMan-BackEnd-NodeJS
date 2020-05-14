@@ -1,8 +1,9 @@
+const bcrypt = require('bcrypt');
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/user')
 const router = express.Router();
-const httpCodes = require('../resources/httpCodes')
+const httpCodes = require('../resources/httpCodes');
 router.get('/', async (req, res) => {
     const users = await User.find();
     res.status(httpCodes.codes.OK).json(users);
@@ -25,12 +26,13 @@ router.post('/', [
     }
     let user = (await User.findOne({email: req.body.email}) || await User.findOne({dni: req.body.dni}) );
     if(user) return res.status(httpCodes.codes.CONFLICT).json({message: "Usuario ya existe"});
-
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
     user = new User({
         name: req.body.name,
         email: req.body.email,
         dni: req.body.dni,
-        password: req.body.password,
+        password: hashPassword,
         roles: req.body.roles
     })
 
