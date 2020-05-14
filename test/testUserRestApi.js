@@ -12,8 +12,20 @@ const assert = chai.assert;
 chai.use(chaiHttp);
 const url ='http://localhost:' + (process.env.PORT || '3000');
 var id;
-console.log(url);
+var token;
 describe('Testing toberumanAPI managing: CHAI + REST', function () {
+    it('should return token', function (done) {
+        chai.request(url)
+            .post("/auth")
+            .send({dni: '093033122821', password: '12345678'})
+            .end(function (err,res) {
+                expect(res).to.have.status((httpCodes.codes.OK));
+                expect(res.body).to.have.property('token',res.body.token);
+                token = res.body.token;
+                done();
+            })
+    });
+
     it('should return an Hola Mundo message', function(done){
         chai.request(url)
             .get("/")
@@ -37,6 +49,7 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
     it('should create a new user', function (done) {
         chai.request(url)
             .post("/users")
+            .set('Authorization', token)
             .send({name: "usuarioprueba",email: "prueba@prueba.com",dni:"0315649866",password: "hola12345"})
             .end(function (err,res) {
                 expect(res).to.have.status(httpCodes.codes.CREATED);
@@ -49,6 +62,7 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
     it('should get an specific user', function (done) {
         chai.request(url)
             .get("/users/"+id)
+            .set('Authorization', token)
             .end(function (err,res){
                 expect(res).to.have.status(httpCodes.codes.OK);
                 expect(res.body).to.have.property('name','usuarioprueba');
@@ -58,6 +72,7 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
     it('should update an user', function (done) {
         chai.request(url)
             .put("/users/"+id)
+            .set('Authorization', token)
             .send({name: "usuariopruebaUPD",email: "prueba2@prueba.com",dni:"0315649466"})
             .end(function(err,res) {
                 expect(res).to.have.status(httpCodes.codes.NOCONTENT);
@@ -69,6 +84,7 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
     it('should delete a user', function (done) {
         chai.request(url)
             .delete("/users/"+id)
+            .set('Authorization', token)
             .end(function(err,res) {
                 expect(res).to.have.status(httpCodes.codes.OK);
                 done();
