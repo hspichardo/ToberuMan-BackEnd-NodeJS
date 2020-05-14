@@ -17,7 +17,7 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
     it('should return token', function (done) {
         chai.request(url)
             .post("/auth")
-            .send({dni: '093033122821', password: '12345678'})
+            .send({dni: '8888', password: 'testuser'})
             .end(function (err,res) {
                 expect(res).to.have.status((httpCodes.codes.OK));
                 expect(res.body).to.have.property('token',res.body.token);
