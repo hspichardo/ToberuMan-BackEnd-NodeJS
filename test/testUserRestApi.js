@@ -50,7 +50,7 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
         chai.request(url)
             .post("/users")
             .set('Authorization', token)
-            .send({name: "usuarioprueba",email: "prueba@prueba.com",dni:"0315649866",password: "hola12345"})
+            .send({name: "usuarioprueba",email: "prueba2@prueba.com",dni:"0315649866",password: "hola12345"})
             .end(function (err,res) {
                 expect(res).to.have.status(httpCodes.codes.CREATED);
                 expect(res.body).to.be.a('object');
