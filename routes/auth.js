@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const { check, validationResult } = require('express-validator');
@@ -17,7 +18,8 @@ router.post('/', [
     if (!user) return res.status(httpCodes.codes.NOTFOUND).json({message: "Usuario y contraseña incorrectos"});
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if(!validPassword) return res.status(httpCodes.codes.NOTFOUND).json({message: "Usuario y contraseña incorrectos"});
-    res.send('Usuario y contraseña correcta');
+    let token = jwt.sign({_id: user._id, name: user.name, roles: user.roles},process.env.SECRET_KEY_JWT_TOBERUMAN_API,{ expiresIn: '1h' });
+    res.json({token: token});
 });
 
 module.exports = router;
