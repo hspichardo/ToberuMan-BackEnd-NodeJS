@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRouter = require('./routes/index');
@@ -9,6 +10,8 @@ const mongodb = require('./db/mongocon')
 const bodyParser = require('body-parser');
 const app = express();
 app.use(logger('dev'));
+app.options('*', cors());
+app.use(cors());
 app.use(bodyParser.urlencoded({
     extended: true
 }));

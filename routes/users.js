@@ -1,3 +1,4 @@
+const authorize = require('../middleware/role')
 const auth = require('../middleware/auth')
 const bcrypt = require('bcrypt');
 const express = require('express');
@@ -16,7 +17,7 @@ router.get('/:id', async (req, res) => {
     res.send(user);
 });
 
-router.post('/', auth,[
+router.post('/', [auth, authorize(['Admin'])],[
     check('dni').isLength({min: 3}),
     check('email').isLength({min: 3},
         check('password').isLength({min: 8}))

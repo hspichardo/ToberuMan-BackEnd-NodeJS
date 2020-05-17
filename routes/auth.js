@@ -8,7 +8,7 @@ const httpCodes = require('../resources/httpCodes');
 
 router.post('/', [
     check('dni').isLength({min: 3}),
-    check('password').isLength({min: 8})
+    check('password').isLength({min: 3})
 ],async(req, res)=> {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
