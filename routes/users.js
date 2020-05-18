@@ -1,5 +1,6 @@
-const authorize = require('../middleware/role')
-const auth = require('../middleware/auth')
+const mongoose = require('mongoose');
+const authorize = require('../middleware/role');
+const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const { check, validationResult } = require('express-validator');
@@ -12,8 +13,8 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const user = await User.findById(req.params.id)
-    if(!user) return res.status(httpCodes.codes.NOTFOUND).send('User not found in DB')
+    const user = await User.findOne({_id: req.params.id});
+    if(!user) return res.status(httpCodes.codes.NOTFOUND).send('User not found in DB');
     res.send(user);
 });
 
