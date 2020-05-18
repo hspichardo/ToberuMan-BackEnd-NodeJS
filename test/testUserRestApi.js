@@ -25,13 +25,23 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
                 done();
             })
     });
+    it('should return error authenticated', function (done) {
+        chai.request(url)
+            .post("/auth")
+            .send({dni: '88fd88', password: 'testdduser'})
+            .end(function (err,res) {
+                expect(res).to.have.status((httpCodes.codes.NOTFOUND));
+                expect(res.body).to.have.property('message',res.body.message);
+                done();
+            })
+    });
 
-    it('should return an Hola Mundo message', function(done){
+    it('should return an ToberumanApi message', function(done){
         chai.request(url)
             .get("/")
             .end(function(err, res){
                 expect(res).to.have.status(httpCodes.codes.OK);
-                expect(res.body).to.have.property('message','Hola Mundo');
+                expect(res.body).to.have.property('message','Bienvenido a Toberuman API Rest');
                 done();
             });
     });
@@ -59,6 +69,17 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
             });
     });
 
+    it('should return a conflict with the new user', function (done) {
+        chai.request(url)
+            .post("/users")
+            .set('Authorization', token)
+            .send({name: "usuarioprueba",email: "prueba2@prueba.com",dni:"0315649866",password: "hola12345"})
+            .end(function (err,res) {
+                expect(res).to.have.status(httpCodes.codes.CONFLICT);
+                done();
+            });
+    });
+
     it('should get an specific user', function (done) {
         chai.request(url)
             .get("/users/"+id)
@@ -66,6 +87,15 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
             .end(function (err,res){
                 expect(res).to.have.status(httpCodes.codes.OK);
                 expect(res.body).to.have.property('name','usuarioprueba');
+                done();
+            });
+    });
+    it('should get an specific user and dont found', function (done) {
+        chai.request(url)
+            .get("/users/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
                 done();
             });
     });
@@ -80,6 +110,8 @@ describe('Testing toberumanAPI managing: CHAI + REST', function () {
                 done();
             });
     });
+
+
 
     it('should delete a user', function (done) {
         chai.request(url)
