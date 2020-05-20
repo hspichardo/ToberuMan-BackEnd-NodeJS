@@ -3,14 +3,14 @@ const authorize = require('../middleware/role');
 const auth = require('../middleware/auth');
 const express = require('express');
 const { check, validationResult } = require('express-validator');
-const Menu = require('../models/Menu')
+const Menu = require('../models/menu');
 const router = express.Router();
 const httpCodes = require('../resources/httpCodes');
 
 router.post('/', [auth, authorize(['Admin'])],[
     check('name').isLength({min: 3}),
     check('description').isLength({min: 3}),
-    check('price').isDecimal()
+    check('price').isDecimal(),
 ],async(req, res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
