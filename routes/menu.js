@@ -14,7 +14,7 @@ router.post('/', [auth, authorize(['Admin'])],[
 ],async(req, res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpCodes.codes.FORBIDDEN).json({ errors: errors.array() });
+        return res.status(httpCodes.codes.CONFLICT).json({ errors: errors.array() });
     }
     const menu = new Menu({
         name: req.body.name,
