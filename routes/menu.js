@@ -33,4 +33,15 @@ router.post('/', [auth, authorize(['Admin'])],[
         isAviable: menu.isAviable
     });
 });
+router.get('/',auth, async (req, res) => {
+    const menus = await Menu.find();
+    res.status(httpCodes.codes.OK).json(menus);
+});
+
+router.get('/:id', async (req, res) => {
+    const menu = await Menu.findOne({_id: req.params.id});
+    if(!menu) return res.status(httpCodes.codes.NOTFOUND).send('Menu not found in DB');
+    res.status(httpCodes.codes.OK).json(menu);
+});
+
 module.exports = router;
