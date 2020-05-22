@@ -44,4 +44,31 @@ router.get('/:id', auth, async (req, res) => {
     res.status(httpCodes.codes.OK).json(menu);
 });
 
+router.put('/:id',auth, [
+    check('name').isLength({min: 3}),
+    check('description').isLength({min: 3})
+], async (req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(httpCodes.codes.FORBIDDEN).json({ errors: errors.array() });
+    }
+
+    const menu = await Menu.findByIdAndUpdate(req.params.id,{
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            menuType: req.body.menuType,
+            isAviable: req.body.isAviable
+        },
+        {
+            new: true
+        })
+
+    if(!menu){
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'El menu con ese ID no se encuentra en la base de datos'});
+    }
+
+    res.status(httpCodes.codes.NOCONTENT).send();
+})
+
 module.exports = router;
