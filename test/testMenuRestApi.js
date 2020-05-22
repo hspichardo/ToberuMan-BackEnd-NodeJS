@@ -101,6 +101,24 @@ describe('Testing toberumanAPI Menu Model managing: CHAI + REST', function () {
                 done();
             });
     });
+    it('should delete a menu', function (done) {
+        chai.request(url)
+            .delete("/menu/"+id)
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.OK);
+                done();
+            })
+    });
+    it('should try to delete a menu but get error', function (done) {
+        chai.request(url)
+            .delete("/menu/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            })
+    });
 });
 
 
