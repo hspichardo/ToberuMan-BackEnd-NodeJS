@@ -79,6 +79,28 @@ describe('Testing toberumanAPI Menu Model managing: CHAI + REST', function () {
                 done();
             });
     });
+
+    it('should update a menu', function (done) {
+        chai.request(url)
+            .put("/menu/"+id)
+            .set('Authorization', token)
+            .send({name: "usuariopruebaUPD",description: "testedited",price:45.2,isAviable: false, menuType: 'DRINK'})
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOCONTENT);
+                expect(res.body).to.be.empty;
+                done();
+            });
+    });
+    it('should try to update a menu but get error', function (done) {
+        chai.request(url)
+            .put("/menu/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .send({name: "usuariopruebaUPD",description: "testedited",price:45.2,isAviable: false, menuType: 'DRINK'})
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            });
+    });
 });
 
 
