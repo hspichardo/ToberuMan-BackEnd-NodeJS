@@ -15,7 +15,7 @@ const menuSchema = new mongoose.Schema({
         default: 'FOOD'
     },
     price:{
-        type: mongoose.Types.Decimal128,
+        type: Number,
         required: true
     },
     isAviable: {
