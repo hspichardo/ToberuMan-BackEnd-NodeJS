@@ -7,7 +7,7 @@ const Menu = require('../models/menu');
 const router = express.Router();
 const httpCodes = require('../resources/httpCodes');
 
-router.post('/', [auth, authorize(['Admin'])],[
+router.post('/', [auth, authorize(['Admin','Manager'])],[
     check('name').isLength({min: 3}),
     check('description').isLength({min: 3}),
     check('price').isDecimal(),
@@ -44,7 +44,7 @@ router.get('/:id', auth, async (req, res) => {
     res.status(httpCodes.codes.OK).json(menu);
 });
 
-router.put('/:id',auth, [
+router.put('/:id',[auth, authorize(['Admin','Manager'])], [
     check('name').isLength({min: 3}),
     check('description').isLength({min: 3})
 ], async (req, res)=>{
@@ -69,6 +69,18 @@ router.put('/:id',auth, [
     }
 
     res.status(httpCodes.codes.NOCONTENT).send();
-})
+});
+
+router.delete('/:id',  [auth, authorize(['Admin','Manager'])],async(req, res)=>{
+
+    const menu = await Menu.findByIdAndDelete(req.params.id);
+
+    if(!menu){
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'El menu con ese ID no esta, no se puede borrar'});
+    }
+
+    res.status(httpCodes.codes.OK).json({message: "Menu eliminado correctamente"});
+
+});
 
 module.exports = router;
