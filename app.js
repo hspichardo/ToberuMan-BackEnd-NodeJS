@@ -7,6 +7,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const menuRouter = require('./routes/menu');
 const authRouter = require('./routes/auth');
+const tableRouter = require('./routes/table');
 const mongodb = require('./db/mongocon')
 const bodyParser = require('body-parser');
 const app = express();
@@ -23,5 +24,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/menu', menuRouter);
+app.use('/table',tableRouter);
 
 module.exports = app;
