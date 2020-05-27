@@ -8,6 +8,7 @@ const usersRouter = require('./routes/users');
 const menuRouter = require('./routes/menu');
 const authRouter = require('./routes/auth');
 const tableRouter = require('./routes/table');
+const orderRouter = require('./routes/order');
 const mongodb = require('./db/mongocon')
 const bodyParser = require('body-parser');
 const app = express();
@@ -25,5 +26,6 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/menu', menuRouter);
 app.use('/table',tableRouter);
+app.use('/order', orderRouter);
 
 module.exports = app;
