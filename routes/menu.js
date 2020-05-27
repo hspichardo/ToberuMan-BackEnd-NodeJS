@@ -3,7 +3,7 @@ const authorize = require('../middleware/role');
 const auth = require('../middleware/auth');
 const express = require('express');
 const { check, validationResult } = require('express-validator');
-const Menu = require('../models/menu');
+const {Menu} = require('../models/menu');
 const router = express.Router();
 const httpCodes = require('../resources/httpCodes');
 

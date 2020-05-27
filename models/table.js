@@ -24,4 +24,5 @@ const tableSchema = new mongoose.Schema({
 });
 const Table = mongoose.model('table',tableSchema);
 
-module.exports = Table;
+module.exports.Table = Table
+module.exports.tableSchema = tableSchema
