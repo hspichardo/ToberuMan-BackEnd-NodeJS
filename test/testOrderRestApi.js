@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 const url ='http://localhost:' + (process.env.PORT || '3000');
 var idtable;
 var menu;
-var idmenu;
+var idmenu, description, price, name, isAviable, menuType;
 var token;
 
 describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
@@ -42,8 +42,7 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
                 done();
             });
     });
-
-    it('should create a new order', function (done) {
+    it('should create a menu', function (done) {
         chai.request(url)
             .post("/menu")
             .set('Authorization', token)
@@ -51,34 +50,24 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
             .end(function (err,res) {
                 expect(res).to.have.status(httpCodes.codes.CREATED);
                 expect(res.body).to.be.a('object');
-                menu = res.body;
                 idmenu = res.body._id;
                 done();
             });
+    });
+    it('should create a new order', function (done) {
         chai.request(url)
             .post("/order")
             .set('Authorization', token)
             .send({
                 "tableid": idtable,
-                "orderLines": [
-                    {"menu":
-                            menu
-                            , "amount": 2}
-                            ]
+                "orderLines": [{"menuid":idmenu, "amount": 2}]
             })
             .end(function (err,res) {
                 expect(res).to.have.status(httpCodes.codes.CREATED);
                 expect(res.body).to.be.a('object');
-                idtable = res.body._id;
+                console.log(res.body)
                 done();
             });
-        chai.request(url)
-            .delete("/menu/"+idmenu)
-            .set('Authorization', token)
-            .end(function(err,res) {
-                expect(res).to.have.status(httpCodes.codes.OK);
-                done();
-            })
     });
 
 });

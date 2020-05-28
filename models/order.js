@@ -10,6 +10,10 @@ const orderSchema = new mongoose.Schema({
     orderLines: {
         type: [orderLineSchema]
     },
+    isReady: {
+        type: Boolean,
+        default: false
+    },
     date: {type: Date, default: Date.now}
 })
 
