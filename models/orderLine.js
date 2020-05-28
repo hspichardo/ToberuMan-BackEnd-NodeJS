@@ -11,5 +11,6 @@ const orderLineSchema = new mongoose.Schema({
         required: true
     }
 })
-
+const OrderLine = mongoose.model('orderLine', orderLineSchema)
+module.exports.OrderLine = OrderLine;
 module.exports.orderLineSchema = orderLineSchema
