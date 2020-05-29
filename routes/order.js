@@ -34,4 +34,38 @@ router.get('/', auth, async (req, res) => {
     res.status(httpCodes.codes.OK).json(orders);
 });
 
+router.put('/:id',[auth, authorize(['Admin','Manager'])], [
+    check('tableid').isLength({min: 3})
+], async (req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(httpCodes.codes.FORBIDDEN).json({ errors: errors.array() });
+    }
+
+    const orderLines = [];
+    for (const line of req.body.orderLines) {
+        let orderline = new OrderLine({
+            menu: await Menu.findById(line.menuid),
+            amount: line.amount
+        });
+        orderLines.push(orderline);
+    }
+
+    const table = await Table.findById(req.body.tableid);
+
+    const order = await Order.findByIdAndUpdate(req.params.id,{
+            table: table,
+            orderLines: orderLines,
+            isReady: req.body.isReady
+        },
+        {
+            new: true
+        })
+
+    if(!order){
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'la orden con ese ID no se encuentra en la base de datos'});
+    }
+
+    res.status(httpCodes.codes.NOCONTENT).send();
+});
 module.exports = router;
