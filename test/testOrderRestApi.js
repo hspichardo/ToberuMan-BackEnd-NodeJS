@@ -70,4 +70,15 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
             });
     });
 
+    it('should return all orders of db', function (done) {
+        chai.request(url)
+            .get('/order')
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.OK);
+                expect(res.body).to.be.a('array');
+                done();
+            })
+    });
+
 });
