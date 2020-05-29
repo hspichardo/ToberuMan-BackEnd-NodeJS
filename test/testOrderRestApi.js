@@ -11,9 +11,9 @@ const assert = chai.assert;
 chai.use(chaiHttp);
 const url ='http://localhost:' + (process.env.PORT || '3000');
 var idtable;
-var menu;
-var idmenu, description, price, name, isAviable, menuType;
+var idmenu;
 var token;
+var idorder;
 
 describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
     it('should return token', function (done) {
@@ -65,6 +65,7 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
             .end(function (err,res) {
                 expect(res).to.have.status(httpCodes.codes.CREATED);
                 expect(res.body).to.be.a('object');
+                idorder = res.body._id;
                 console.log(res.body)
                 done();
             });
@@ -79,6 +80,37 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
                 expect(res.body).to.be.a('array');
                 done();
             })
+    });
+
+    it('should update an order', function (done) {
+        chai.request(url)
+            .put('/order/'+idorder)
+            .send({
+                "tableid": idtable,
+                "orderLines": [{"menuid":idmenu, "amount": 8}],
+                "isReady": true
+            })
+            .set('Authorization', token)
+            .end(function (err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOCONTENT);
+                expect(res.body).to.be.empty;
+                done();
+            })
+    });
+
+    it('should try to update a menu but get error', function (done) {
+        chai.request(url)
+            .put('/order/5ebd84e9f6dab12345678dfd')
+            .send({
+                "tableid": idtable,
+                "orderLines": [{"menuid":idmenu, "amount": 8}],
+                "isReady": true
+            })
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            });
     });
 
 });
