@@ -29,4 +29,9 @@ router.post('/', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
     res.status(httpCodes.codes.CREATED).send(order);
 });
 
+router.get('/', auth, async (req, res) => {
+    const orders = await Order.find();
+    res.status(httpCodes.codes.OK).json(orders);
+});
+
 module.exports = router;
