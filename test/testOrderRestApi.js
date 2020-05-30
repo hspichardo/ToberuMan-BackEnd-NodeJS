@@ -113,4 +113,23 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
             });
     });
 
+    it('should delete an order', function (done) {
+        chai.request(url)
+            .delete("/order/"+idorder)
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.OK);
+                done();
+            })
+    });
+    it('should try to delete an order but get error', function (done) {
+        chai.request(url)
+            .delete("/order/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            })
+    });
+
 });
