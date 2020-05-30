@@ -68,4 +68,16 @@ router.put('/:id',[auth, authorize(['Admin','Manager'])], [
 
     res.status(httpCodes.codes.NOCONTENT).send();
 });
+
+router.delete('/:id',  [auth, authorize(['Admin','Manager'])],async(req, res)=>{
+
+    const order = await Order.findByIdAndDelete(req.params.id);
+
+    if(!order){
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'la orden con ese ID no esta, no se puede borrar'});
+    }
+
+    res.status(httpCodes.codes.OK).json({message: "Orden eliminada correctamente"});
+
+});
 module.exports = router;
