@@ -70,9 +70,9 @@ describe('Testing toberumanAPI Menu Model managing: CHAI + REST', function () {
                 done();
             });
     });
-    it('should get an specific user and dont found', function (done) {
+    it('should get an specific menu and dont found', function (done) {
         chai.request(url)
-            .get("/users/5ebd84e9f6dab12345678dfd")
+            .get("/menu/5ebd84e9f6dab12345678dfd")
             .set('Authorization', token)
             .end(function (err,res){
                 expect(res).to.have.status(httpCodes.codes.NOTFOUND);
