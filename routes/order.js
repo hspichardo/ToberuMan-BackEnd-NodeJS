@@ -33,6 +33,11 @@ router.get('/', auth, async (req, res) => {
     const orders = await Order.find();
     res.status(httpCodes.codes.OK).json(orders);
 });
+router.get('/:id', auth, async (req, res) => {
+    const order = await Order.findOne({_id: req.params.id});
+    if(!order) return res.status(httpCodes.codes.NOTFOUND).send('Order not found in DB');
+    res.status(httpCodes.codes.OK).json(order);
+});
 
 router.put('/:id',[auth, authorize(['Admin','Manager'])], [
     check('tableid').isLength({min: 3})
