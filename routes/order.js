@@ -7,7 +7,7 @@ const {Table}= require('../models/table');
 const {orderLineSchema} = require('../models/orderLine')
 const {OrderLine} = require('../models/orderLine')
 const {Menu} = require('../models/menu')
-const Order = require('../models/order')
+const {Order} = require('../models/order')
 const router = express.Router();
 const httpCodes = require('../resources/httpCodes');
 
