@@ -9,6 +9,7 @@ const menuRouter = require('./routes/menu');
 const authRouter = require('./routes/auth');
 const tableRouter = require('./routes/table');
 const orderRouter = require('./routes/order');
+const invoiceRouter = require('./routes/invoice');
 const mongodb = require('./db/mongocon')
 const bodyParser = require('body-parser');
 const app = express();
@@ -27,5 +28,5 @@ app.use('/auth', authRouter);
 app.use('/menu', menuRouter);
 app.use('/table',tableRouter);
 app.use('/order', orderRouter);
-
+app.use('/invoice', invoiceRouter);
 module.exports = app;
