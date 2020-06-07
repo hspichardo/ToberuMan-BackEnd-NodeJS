@@ -12,10 +12,22 @@ const fs = require('fs-extra');
 const path = require('path');
 const hbs = require('handlebars');
 const moment = require('moment');
+var nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport')
+var transporter = nodemailer.createTransport(smtpTransport({
+    service: 'gmail',
+    auth: {
+        user: 'toberumanapi@gmail.com',
+        pass: 'iuelafcxipgyfqnd'
+    },
+    tls: { rejectUnauthorized: false }
+}))
 
-router.post('/:id', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
-    const orderIn = await Order.findOne({_id: req.params.id});
+router.post('/', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
+    const orderIn = await Order.findOne({_id: req.body.idorder});
     if(!orderIn) return res.status(httpCodes.codes.NOTFOUND).send('Order not found in DB');
+    const hasInvoice = await Invoice.findOne({order: orderIn});
+    if(hasInvoice) return res.status(httpCodes.codes.CONFLICT).send('Invoice already exists');
     let invoiceCount = await Invoice.find();
     if(invoiceCount.length === 0) invoiceCount = 1;
     else invoiceCount = invoiceCount.length + 1;
@@ -59,10 +71,31 @@ router.post('/:id', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
         format: 'A5',
         printBackground: true
     });
-    await page.setRequestInterception(true);
     console.log('done');
     await browser.close();
     var factura =  fs.readFileSync('./invoices/invoice.pdf');
+
+    var mailOptions = {
+        from:	 'toberumanapi@gmail.com',
+        to: 	req.body.emailrecipient,
+        subject: 'ToberuMan factura No. ' + invoice.number,
+        text: 	'Estimado, se adjunta la factura correspondiente a su pedido el dia de hoy!',
+        attachments: [
+            {
+                filename: 'invoice.pdf',
+                path: './invoices/invoice.pdf',
+                cid: 'invoice@toberumanapi.herokuapp.com' // should be as unique as possible
+            }
+        ]
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }  });
+
     res.setHeader('Content-Type', 'application/pdf');
     res.status(httpCodes.codes.CREATED).send(factura);
 });
