@@ -17,8 +17,8 @@ const smtpTransport = require('nodemailer-smtp-transport')
 var transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     auth: {
-        user: 'toberumanapi@gmail.com',
-        pass: 'iuelafcxipgyfqnd'
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
     },
     tls: { rejectUnauthorized: false }
 }))
@@ -31,6 +31,8 @@ router.post('/', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
     let invoiceCount = await Invoice.find();
     if(invoiceCount.length === 0) invoiceCount = 1;
     else invoiceCount = invoiceCount.length + 1;
+    console.log(process.env.MAIL_PASS);
+    console.log(process.env.MAIL_USER);
     console.log(invoiceCount);
     let subtotal = 0;
     for(let orderline of orderIn.orderLines){
