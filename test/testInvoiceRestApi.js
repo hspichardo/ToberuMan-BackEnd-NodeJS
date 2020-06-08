@@ -16,7 +16,7 @@ var token;
 var idtable;
 var idmenu;
 
-describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
+describe('Testing toberumanAPI invoice model managing: CHAI + REST', function () {
     it('should return token', function (done) {
         chai.request(url)
             .post("/auth")
