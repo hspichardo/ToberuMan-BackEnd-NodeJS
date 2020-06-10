@@ -23,7 +23,7 @@ var transporter = nodemailer.createTransport(smtpTransport({
     tls: { rejectUnauthorized: false }
 }))
 
-router.post('/', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
+router.post('/', [auth, authorize(['Admin','Manager','Waiter'])],async(req, res)=>{
     const orderIn = await Order.findOne({_id: req.body.idorder});
     if(!orderIn) return res.status(httpCodes.codes.NOTFOUND).send('Order not found in DB');
     const hasInvoice = await Invoice.findOne({order: orderIn});

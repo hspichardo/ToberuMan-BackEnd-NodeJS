@@ -11,7 +11,7 @@ const {Order} = require('../models/order')
 const router = express.Router();
 const httpCodes = require('../resources/httpCodes');
 
-router.post('/', [auth, authorize(['Admin','Manager'])],async(req, res)=>{
+router.post('/', [auth, authorize(['Admin','Manager','Waiter'])],async(req, res)=>{
     const orderLines = [];
     for (const line of req.body.orderLines) {
         let orderline = new OrderLine({
@@ -39,7 +39,7 @@ router.get('/:id', auth, async (req, res) => {
     res.status(httpCodes.codes.OK).json(order);
 });
 
-router.put('/:id',[auth, authorize(['Admin','Manager'])], [
+router.put('/:id',[auth, authorize(['Admin','Manager','Waiter'])], [
     check('tableid').isLength({min: 3})
 ], async (req, res)=>{
     const errors = validationResult(req);
