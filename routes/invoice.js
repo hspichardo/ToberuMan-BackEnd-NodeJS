@@ -102,4 +102,9 @@ router.post('/', [auth, authorize(['Admin','Manager','Waiter'])],async(req, res)
     res.status(httpCodes.codes.CREATED).send(factura);
 });
 
+router.get('/', [auth, authorize(['Admin','Manager'])], async (req, res) => {
+    const invoices = await Invoice.find();
+    res.status(httpCodes.codes.OK).json(invoices);
+});
+
 module.exports = router;
