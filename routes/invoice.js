@@ -103,6 +103,7 @@ router.post('/', [auth, authorize(['Admin','Manager','Waiter'])],async(req, res)
     var factura =  fs.readFileSync('./invoices/invoice.pdf');
     sendMail(req, invoice);
     res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('idInvoice', invoice._id);
     res.status(httpCodes.codes.CREATED).send(factura);
 });
 
@@ -113,6 +114,7 @@ router.get('/', [auth, authorize(['Admin','Manager'])], async (req, res) => {
 
 router.get('/:id', [auth, authorize(['Admin','Manager'])], async (req, res) => {
     const invoice = await Invoice.findOne({_id: req.params.id});
+    if(!invoice) return res.status(httpCodes.codes.NOTFOUND).send('Invoice not found in DB');
     await generatePdf(invoice);
     var factura =  fs.readFileSync('./invoices/invoice.pdf');
     res.setHeader('Content-Type', 'application/pdf');

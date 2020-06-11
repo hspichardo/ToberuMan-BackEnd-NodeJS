@@ -15,6 +15,7 @@ var idorder;
 var token;
 var idtable;
 var idmenu;
+var idinvoice;
 
 describe('Testing toberumanAPI invoice model managing: CHAI + REST', function () {
     it('should return token', function (done) {
@@ -79,6 +80,8 @@ describe('Testing toberumanAPI invoice model managing: CHAI + REST', function ()
             .send({"idorder":idorder,"emailrecipient":emailto})
             .end(function (err,res){
                 expect(res).to.have.status(httpCodes.codes.CREATED);
+                expect(res.header).to.have.property('content-type', 'application/pdf');
+                idinvoice = res.header.idinvoice
                 done();
             })
     });
@@ -102,6 +105,38 @@ describe('Testing toberumanAPI invoice model managing: CHAI + REST', function ()
                 done();
             })
     });
+
+    it('should return all invoices of db', function (done) {
+        chai.request(url)
+            .get('/invoice')
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.OK);
+                expect(res.body).to.be.a('array');
+                done();
+            })
+    });
+
+    it('should return and invoice pdf', function (done) {
+        chai.request(url)
+            .get('/invoice/' + idinvoice)
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.OK);
+                expect(res.header).to.have.property('content-type', 'application/pdf');
+                done();
+            })
+    });
+    it('should get an specific invoice and dont found', function (done) {
+        chai.request(url)
+            .get("/order/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            });
+    });
+
 
 
 });
