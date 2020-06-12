@@ -151,5 +151,14 @@ describe('Testing toberumanAPI Order Model managing: CHAI + REST', function () {
                 done();
             })
     });
-
+    it('should return orders for today for cousine of db', function (done) {
+        chai.request(url)
+            .get('/order/cousine/all')
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.OK);
+                expect(res.body).to.be.a('array');
+                done();
+            })
+    });
 });
