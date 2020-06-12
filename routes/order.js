@@ -10,6 +10,9 @@ const {Menu} = require('../models/menu')
 const {Order} = require('../models/order')
 const router = express.Router();
 const httpCodes = require('../resources/httpCodes');
+const moment = require('moment')
+
+
 
 router.post('/', [auth, authorize(['Admin','Manager','Waiter'])],async(req, res)=>{
     const orderLines = [];
@@ -84,5 +87,16 @@ router.delete('/:id',  [auth, authorize(['Admin','Manager'])],async(req, res)=>{
 
     res.status(httpCodes.codes.OK).json({message: "Orden eliminada correctamente"});
 
+});
+router.get('/cousine/all', auth, async (req, res) => {
+    const today = moment().startOf('day');
+
+    const orders = await Order.find({
+        date: {
+            $gte: today.toDate(),
+            $lte: moment(today).endOf('day').toDate()
+        }
+    }).sort({date: -1});
+    res.status(httpCodes.codes.OK).json(orders);
 });
 module.exports = router;
