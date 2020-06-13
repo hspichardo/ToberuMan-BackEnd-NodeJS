@@ -42,7 +42,7 @@ router.get('/:id', auth, async (req, res) => {
     res.status(httpCodes.codes.OK).json(order);
 });
 
-router.put('/:id',[auth, authorize(['Admin','Manager','Waiter'])], [
+router.put('/:id',[auth, authorize(['Admin','Manager','Waiter', 'Cousine'])], [
     check('tableid').isLength({min: 3})
 ], async (req, res)=>{
     const errors = validationResult(req);
@@ -88,7 +88,7 @@ router.delete('/:id',  [auth, authorize(['Admin','Manager'])],async(req, res)=>{
     res.status(httpCodes.codes.OK).json({message: "Orden eliminada correctamente"});
 
 });
-router.get('/cousine/all', auth, async (req, res) => {
+router.get('/cousine/all', [auth, authorize(['Admin','Manager','Waiter', 'Cousine'])], async (req, res) => {
     const today = moment().startOf('day');
 
     const orders = await Order.find({
