@@ -37,7 +37,12 @@ async function generatePdf(invoice) {
     hbs.registerHelper('dateFormat', function (value, format) {
         return moment(value).format(format);
     });
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        'args' : [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ]
+    });
     const page = await browser.newPage();
     const content = await compile('invoice', invoicedata);
     fs.writeFile('./invoices/invoice.html', content, function (err) {
