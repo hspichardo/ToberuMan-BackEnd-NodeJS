@@ -53,5 +53,34 @@ describe('Testing toberumanAPI Table Model managing: CHAI + REST', function () {
                 done();
             });
     });
+    it('should return an array of tables', function (done) {
+        chai.request(url)
+            .get("/table")
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.OK);
+                expect(res.body).to.be.a('array');
+                done();
+            });
+    });
+    it('should get a specific table', function (done) {
+        chai.request(url)
+            .get("/table/"+idtable)
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.OK);
+                expect(res.body).to.have.property('capacity',4);
+                done();
+            });
+    });
+    it('should get an specific table and dont found', function (done) {
+        chai.request(url)
+            .get("/table/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .end(function (err,res){
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            });
+    });
 
 });

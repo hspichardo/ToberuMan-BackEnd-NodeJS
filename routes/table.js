@@ -12,6 +12,12 @@ router.get('/', auth, async (req, res) => {
     res.status(httpCodes.codes.OK).json(tables);
 });
 
+router.get('/:id', auth, async (req, res) => {
+    const table = await Table.findOne({_id: req.params.id});
+    if(!table) return res.status(httpCodes.codes.NOTFOUND).send('Table not found in DB');
+    res.status(httpCodes.codes.OK).json(table);
+});
+
 router.post('/', [auth, authorize(['Admin','Manager'])],[
     check('number').isNumeric(),
     check('capacity').isNumeric()
