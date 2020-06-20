@@ -44,4 +44,30 @@ router.post('/', [auth, authorize(['Admin','Manager'])],[
     });
 });
 
+router.put('/:id',[auth, authorize(['Admin','Manager'])], [
+    check('number').isNumeric(),
+    check('capacity').isNumeric()
+], async (req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(httpCodes.codes.FORBIDDEN).json({ errors: errors.array() });
+    }
+    const table = await Table.findByIdAndUpdate(req.params.id,{
+            number: req.body.number,
+            capacity: req.body.capacity,
+            isTaken: req.body.isTaken,
+            isReserved: req.body.isReserved,
+            reservationDate: req.body.reservationDate
+        },
+        {
+            new: true
+        });
+
+    if(!table){
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'Table not found in DB'});
+    }
+
+    res.status(httpCodes.codes.NOCONTENT).send();
+});
+
 module.exports = router;
