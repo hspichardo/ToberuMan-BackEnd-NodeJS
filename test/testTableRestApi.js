@@ -103,5 +103,23 @@ describe('Testing toberumanAPI Table Model managing: CHAI + REST', function () {
                 done();
             });
     });
+    it('should delete a table', function (done) {
+        chai.request(url)
+            .delete("/table/"+idtable)
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.OK);
+                done();
+            })
+    });
+    it('should try to delete a table but get error', function (done) {
+        chai.request(url)
+            .delete("/table/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            })
+    });
 
 });
