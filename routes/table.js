@@ -69,5 +69,15 @@ router.put('/:id',[auth, authorize(['Admin','Manager'])], [
 
     res.status(httpCodes.codes.NOCONTENT).send();
 });
+router.delete('/:id',  [auth, authorize(['Admin','Manager'])],async(req, res)=>{
 
+    const table = await Table.findByIdAndDelete(req.params.id);
+
+    if(!table){
+        return res.status(httpCodes.codes.NOTFOUND).json({message: 'Table not found'});
+    }
+
+    res.status(httpCodes.codes.OK).json({message: "Table Deleted"});
+
+});
 module.exports = router;
