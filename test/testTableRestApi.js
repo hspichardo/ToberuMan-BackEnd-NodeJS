@@ -82,5 +82,26 @@ describe('Testing toberumanAPI Table Model managing: CHAI + REST', function () {
                 done();
             });
     });
+    it('should update a table', function (done) {
+        chai.request(url)
+            .put("/table/"+idtable)
+            .set('Authorization', token)
+            .send({number: 4,capacity: 5,isTaken: false,isReserved: false, reservationDate: Date.now()})
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOCONTENT);
+                expect(res.body).to.be.empty;
+                done();
+            });
+    });
+    it('should try to update a table but get error', function (done) {
+        chai.request(url)
+            .put("/table/5ebd84e9f6dab12345678dfd")
+            .set('Authorization', token)
+            .send({number: 4,capacity: 5,isTaken: false,isReserved: false, reservationDate: Date.now()})
+            .end(function(err,res) {
+                expect(res).to.have.status(httpCodes.codes.NOTFOUND);
+                done();
+            });
+    });
 
 });
