@@ -44,7 +44,7 @@ router.post('/', [auth, authorize(['Admin','Manager'])],[
     });
 });
 
-router.put('/:id',[auth, authorize(['Admin','Manager'])], [
+router.put('/:id',[auth, authorize(['Admin','Manager','Waiter'])], [
     check('number').isNumeric(),
     check('capacity').isNumeric()
 ], async (req, res)=>{
