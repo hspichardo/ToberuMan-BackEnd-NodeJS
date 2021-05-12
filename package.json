@@ -24,7 +24,7 @@
     "mongoose": "^5.9.13",
     "mongoose-double": "0.0.1",
     "morgan": "~1.9.1",
-    "nodemailer": "^6.4.8",
+    "nodemailer": "^6.4.16",
     "nodemailer-smtp-transport": "^2.7.4",
     "puppeteer": "^3.3.0"
   },
