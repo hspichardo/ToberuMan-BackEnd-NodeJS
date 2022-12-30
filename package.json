@@ -19,7 +19,7 @@
     "fs-extra": "^9.0.1",
     "handlebars": "^4.7.6",
     "jsonwebtoken": "^8.5.1",
-    "mocha": "^7.1.2",
+    "mocha": "^10.2.0",
     "moment": "^2.26.0",
     "mongoose": "^5.9.13",
     "mongoose-double": "0.0.1",
